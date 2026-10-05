@@ -95,8 +95,13 @@
   }
 
   /* ---------- UI ---------- */
-  // ลายนิ้วมือ (โครงจาก Lucide "fingerprint" · ISC) ไล่สีทองแบบโลโก้
+  // ไอคอนไล่สีทองแบบโลโก้ · ลายนิ้วมือ (โครงจาก Lucide "fingerprint" · ISC) / สแกนหน้า (กรอบมุม + หน้า แบบ Face ID)
+  const GOLD = '<defs><linearGradient id="falg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3e3a8"/><stop offset="1" stop-color="#b08a52"/></linearGradient></defs>';
   const FINGER = '<svg viewBox="0 0 24 24" fill="none" stroke="url(#falg)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="falg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3e3a8"/><stop offset="1" stop-color="#b08a52"/></linearGradient></defs><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/></svg>';
+  const FACE = '<svg viewBox="0 0 24 24" fill="none" stroke="url(#falg)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + GOLD + '<path d="M3 8V5.5A2.5 2.5 0 0 1 5.5 3H8"/><path d="M16 3h2.5A2.5 2.5 0 0 1 21 5.5V8"/><path d="M21 16v2.5a2.5 2.5 0 0 1-2.5 2.5H16"/><path d="M8 21H5.5A2.5 2.5 0 0 1 3 18.5V16"/><path d="M8.5 9v1.6"/><path d="M15.5 9v1.6"/><path d="M12.2 9v4.3h-1"/><path d="M9 16.1c1.7 1.4 4.3 1.4 6 0"/></svg>';
+  // เว็บแยก Face ID / Touch ID ตรงๆ ไม่ได้ → เดาจากเครื่อง: iPhone จอสูง ≥ 812pt (X ขึ้นไป) = สแกนหน้า · นอกนั้น = ลายนิ้วมือ
+  const IS_FACE = /iPhone/.test(navigator.userAgent) && Math.max(screen.width, screen.height) >= 812;
+  const BIO = IS_FACE ? { icon: FACE, name: 'สแกนหน้า', btn: 'ปุ่มสแกนหน้า', short: 'Face ID' } : { icon: FINGER, name: 'สแกนลายนิ้วมือ', btn: 'ปุ่มลายนิ้วมือ', short: 'สแกนนิ้ว' };
   const BACK = '<svg viewBox="0 0 24 24"><path d="M8.6 5h11A1.4 1.4 0 0 1 21 6.4v11.2a1.4 1.4 0 0 1-1.4 1.4h-11a1.4 1.4 0 0 1-1-.4L2.4 12.7a1 1 0 0 1 0-1.4l5.2-5.9a1.4 1.4 0 0 1 1-.4z" fill="#e2bd72"/><path d="M11.2 9.2l5.6 5.6m0-5.6l-5.6 5.6" stroke="#17140e" stroke-width="2" stroke-linecap="round"/></svg>';
   let ui = null;
 
@@ -112,12 +117,12 @@
       <div class="fal-dots" aria-live="polite">${'<i></i>'.repeat(LEN)}</div>
       <div class="fal-pad">
         ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => `<button class="fal-key" data-k="${n}" aria-label="${n}">${n}</button>`).join('')}
-        <button class="fal-key ghost" data-k="finger" aria-label="สแกนลายนิ้วมือ">${FINGER}</button>
+        <button class="fal-key ghost" data-k="finger" aria-label="${BIO.name}">${BIO.icon}</button>
         <button class="fal-key" data-k="0" aria-label="0">0</button>
         <button class="fal-key ghost" data-k="back" aria-label="ลบ">${BACK}</button>
       </div>
-      <div class="fal-offer"><p>เปิดใช้สแกนลายนิ้วมือ / Face ID บนเครื่องนี้ไหมคะ<br>ครั้งหน้าไม่ต้องใส่รหัส</p>
-        <button class="fal-btn gold" data-k="enroll">เปิดใช้สแกนนิ้ว</button><button class="fal-btn plain" data-k="skip">ไม่ตอนนี้</button></div>
+      <div class="fal-offer"><p>เปิดใช้${BIO.name}บนเครื่องนี้ไหมคะ<br>ครั้งหน้าเปิดแล้วสแกนอัตโนมัติ ไม่ต้องใส่รหัส</p>
+        <button class="fal-btn gold" data-k="enroll">เปิดใช้${BIO.short}</button><button class="fal-btn plain" data-k="skip">ไม่ตอนนี้</button></div>
       <div class="fal-busy"></div>
       <div class="fal-msg"></div>
     </div>`;
@@ -137,9 +142,9 @@
       document.documentElement.style.overflow = 'hidden';
       const dots = ui.querySelector('.fal-dots'), msg = ui.querySelector('.fal-msg');
       let pin = '', busy = false, prf = null;
-      prfCapable().then((v) => { prf = v; hint(); });
+      prfCapable().then((v) => { prf = v; if (!busy) hint(); });
       const say = (t, ok) => { msg.textContent = t; msg.classList.toggle('ok', !!ok); };
-      const hint = () => say(hasPK() ? 'แตะปุ่มลายนิ้วมือเพื่อสแกน หรือใส่รหัสผ่าน' : 'ใส่รหัสผ่าน 8 หลัก', true);
+      const hint = () => say(hasPK() ? `แตะ${BIO.btn}เพื่อสแกน หรือใส่รหัสผ่าน` : 'ใส่รหัสผ่าน 8 หลัก', true);
       const paint = () => dots.querySelectorAll('i').forEach((d, i) => d.classList.toggle('on', i < pin.length));
       const lockedFor = () => { const f = JSON.parse(localStorage.getItem(FK) || '{"n":0,"t":0}'); return Math.max(0, f.t - Date.now()); };
       const done = (key) => {
@@ -180,14 +185,15 @@
         say(t); dots.className = 'fal-dots err fal-shake'; if (navigator.vibrate) navigator.vibrate(120);
         setTimeout(() => { dots.className = 'fal-dots'; pin = ''; paint(); }, 450);
       }
-      async function finger() {
-        if (!hasPK()) { say(prf === false ? 'เครื่อง/เบราว์เซอร์นี้ยังสแกนนิ้วไม่ได้ ใส่รหัสผ่านแทนนะคะ' : 'ใส่รหัสผ่านครั้งแรกก่อน แล้วเปิดใช้สแกนนิ้วได้'); return; }
+      async function finger(auto) {
+        if (!hasPK()) { say(prf === false ? `เครื่อง/เบราว์เซอร์นี้ยัง${BIO.name}ไม่ได้ ใส่รหัสผ่านแทนนะคะ` : `ใส่รหัสผ่านครั้งแรกก่อน แล้วเปิดใช้${BIO.name}ได้`); return; }
         busy = true; ui.classList.add('busy'); say('กำลังสแกน…', true);
         try { const key = await unlockByFinger(); ui.classList.remove('busy'); busy = false; await success(key, true); }
         catch (e) {
           ui.classList.remove('busy'); busy = false;
-          if (e && e.name === 'NotAllowedError') hint();
-          else { localStorage.removeItem(PK); say('สแกนนิ้วใช้ไม่ได้แล้ว ใส่รหัสผ่านแล้วเปิดใช้ใหม่นะคะ'); }
+          // สแกนอัตโนมัติถูกเบราว์เซอร์ปัด (ต้องแตะก่อน) / ผู้ใช้กดยกเลิก → แค่บอกให้แตะปุ่ม ไม่ลบที่ลงไว้
+          if (auto || (e && e.name === 'NotAllowedError')) hint();
+          else { localStorage.removeItem(PK); say(`${BIO.name}ใช้ไม่ได้แล้ว ใส่รหัสผ่านแล้วเปิดใช้ใหม่นะคะ`); }
         }
       }
       function press(k) {
@@ -214,6 +220,7 @@
       };
       const flash = (k) => { const b = ui.querySelector(`[data-k="${k}"]`); if (b) { b.classList.add('press'); setTimeout(() => b.classList.remove('press'), 110); } };
       paint();
+      if (hasPK()) setTimeout(() => { if (!busy && !ui.hidden && !pin) finger(true); }, 250);   // ลงไว้แล้ว → สแกนให้เลยตอนเปิด
     });
   }
 
