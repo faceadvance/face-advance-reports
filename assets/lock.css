@@ -23,6 +23,7 @@
 .fal-key.ghost{background:transparent;border-color:transparent}
 .fal-key.ghost:active{background:#ffffff0d}
 .fal-key svg{width:34px;height:34px}
+.fal-key[data-k="finger"] svg{width:38px;height:38px}
 .fal-key:disabled{opacity:.35;cursor:default}
 .fal-msg{min-height:22px;margin:22px 0 0;color:#e0707f;font-size:14.5px;line-height:1.5}
 .fal-msg.ok{color:#9fb0c9}

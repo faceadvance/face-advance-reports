@@ -95,7 +95,8 @@
   }
 
   /* ---------- UI ---------- */
-  const FINGER = '<svg viewBox="0 0 24 24" fill="none" stroke="#e2bd72" stroke-width="1.6" stroke-linecap="round"><path d="M12 11c0 3.5-1 6.5-2.6 9"/><path d="M8.6 8.3A4 4 0 0 1 16 10.5c0 1.1-.06 2.1-.2 3.1"/><path d="M15.4 17.3c-.3 1.2-.8 2.4-1.4 3.4"/><path d="M5.7 15.7c.5-1.4.8-3.1.8-5.2a5.5 5.5 0 0 1 9.5-3.8"/><path d="M18.6 9.2c.3.7.4 1.4.4 2.3 0 .9 0 1.7-.1 2.5"/><path d="M3.3 12.5c.2-.7.2-1.3.2-2a8.5 8.5 0 0 1 14.6-5.9"/><path d="M20.8 15.3c.1-1 .2-2.4.2-3.8"/><path d="M12 14.6c-.2 2.1-.8 4-1.6 5.6"/></svg>';
+  // ลายนิ้วมือ (โครงจาก Lucide "fingerprint" · ISC) ไล่สีทองแบบโลโก้
+  const FINGER = '<svg viewBox="0 0 24 24" fill="none" stroke="url(#falg)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="falg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3e3a8"/><stop offset="1" stop-color="#b08a52"/></linearGradient></defs><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/></svg>';
   const BACK = '<svg viewBox="0 0 24 24"><path d="M8.6 5h11A1.4 1.4 0 0 1 21 6.4v11.2a1.4 1.4 0 0 1-1.4 1.4h-11a1.4 1.4 0 0 1-1-.4L2.4 12.7a1 1 0 0 1 0-1.4l5.2-5.9a1.4 1.4 0 0 1 1-.4z" fill="#e2bd72"/><path d="M11.2 9.2l5.6 5.6m0-5.6l-5.6 5.6" stroke="#17140e" stroke-width="2" stroke-linecap="round"/></svg>';
   let ui = null;
 
