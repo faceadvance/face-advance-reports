@@ -36,6 +36,7 @@ while [ $# -gt 0 ]; do
 done
 [[ "$SLUG" =~ ^[a-z0-9-]+$ ]] || die "slug ต้องเป็น a-z 0-9 - เท่านั้น: $SLUG"
 [ -f "$HTML" ] || die "ไม่เจอไฟล์ $HTML"
+HTML="$(cd "$(dirname "$HTML")" && pwd)/$(basename "$HTML")"   # เป็น path เต็มก่อน cd เข้า repo
 if [ -z "${REPORTS_PASS:-}" ]; then set -a; source ~/.claude/secrets.env >/dev/null 2>&1 || true; set +a; fi
 [ -n "${REPORTS_PASS:-}" ] || die "ไม่มี REPORTS_PASS (ดู ~/.claude/secrets.env)"
 mkdir -p "$SRC"
