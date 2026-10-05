@@ -10,18 +10,14 @@
   - ลงไว้แล้ว → เปิดหน้าแล้วสแกนอัตโนมัติ · iPhone จอ ≥ 812pt แสดงเป็น "สแกนหน้า" (เว็บแยก Face ID/Touch ID ตรงๆ ไม่ได้ จึงเดาจากรุ่น)
 - ระดับ: กันคนทั่วไปเข้าดู ไม่ใช่กันผู้เชี่ยวชาญที่ตั้งใจเจาะ (รหัสตัวเลข 8 หลัก เดาออฟไลน์ได้ถ้ามีเครื่องแรง)
 
-## เพิ่ม/อัปเดตรายงาน
-ชื่อไฟล์ใน `data/` เป็นรหัสสุ่ม (ไม่บอกหัวข้อรายงาน) · ตารางจับคู่ slug ↔ ไฟล์ ↔ สคริปต์สร้าง อยู่ที่ `../reports-src/README.md` (นอก repo)
-1. สร้าง JSON ดิบไว้ **นอก repo** ที่ `../reports-src/<slug>.json` รูปแบบ `{"v":1,"html":"<หน้ารายงานทั้งหน้า>"}`
-   (หน้ารายงานควรมีปุ่ม `href="./"` กลับหน้ารวม และปุ่มล็อกที่ลบ `sessionStorage['fa.k']`)
-2. สุ่ม id แล้วเพิ่มรายการใน `../reports-src/manifest.json` → `{"slug","file":"<id>","tag","title","desc","meta"}`
-3. เข้ารหัส (รหัสอ่านจาก `REPORTS_PASS` ใน `~/.claude/secrets.env`):
-   ```sh
-   set -a; source ~/.claude/secrets.env; set +a
-   node tools/encrypt.mjs ../reports-src/<slug>.json <id>
-   node tools/encrypt.mjs ../reports-src/manifest.json manifest
-   node tools/encrypt.mjs --check <id>
-   ```
-4. บันทึก `CHANGELOG.md` (ไม่ต้องระบุตัวเลข/ชื่อสินค้า) แล้ว commit + push (GitHub Pages deploy ให้เอง)
+## เพิ่ม/อัปเดตรายงาน (คำสั่งเดียว)
+```sh
+tools/publish.sh <slug> <หน้ารายงาน.html> --title "ชื่อ" --desc "คำอธิบาย" --tag "ป้าย" --meta "ข้อมูลถึง … · อัปเดต …"
+```
+- รายงานใหม่ต้องมี `--title` · อัปเดตรายงานเดิมใส่แค่ slug + ไฟล์ (ตัวเลือกอื่นไม่ใส่ = ใช้ค่าเดิม)
+- สคริปต์ทำ: ตรวจหน้า (มีปุ่มกลับ/ออกจากระบบ · ไม่มีรหัสหลุด) → เก็บไฟล์ดิบที่ `../reports-src/` → เข้ารหัส (ชื่อไฟล์สุ่ม) → อัปเดตรายการหน้ารวม → CHANGELOG (hash + เวลา · ไม่ระบุชื่อรายงาน) → commit → push → รอจนเว็บจริงตรง
+- เนื้อหาไม่เปลี่ยนจากรอบก่อน = ไม่ push (ใช้ `--force` ถ้าต้องการ) · `--dry-run` = ทำทุกอย่างยกเว้น commit/push
+- commit ของสคริปต์แตะได้แค่ `data/` + `CHANGELOG.md` · repo มีไฟล์ค้าง = หยุด (แก้โค้ดเว็บให้ commit แยกเอง)
+- ตารางจับคู่ slug ↔ ไฟล์ อยู่ใน `../reports-src/manifest.json` (นอก repo)
 
 **เปลี่ยนรหัส:** แก้ `REPORTS_PASS` → ลบ `data/meta.json` (ได้ salt ใหม่) → เข้ารหัสทุกไฟล์ใหม่ · passkey เดิมทุกเครื่องจะใช้ไม่ได้ ต้องใส่รหัสใหม่แล้วเปิดใช้ใหม่
