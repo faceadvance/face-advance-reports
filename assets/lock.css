@@ -1,0 +1,41 @@
+/* หน้าใส่รหัส Face Advance (ใช้ร่วมทุกหน้า) */
+.fal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px 16px;overflow:auto;
+  background:radial-gradient(120% 70% at 50% -10%,#2b2721 0%,#13120f 45%,#07080c 100%);font-family:"Kanit","IBM Plex Sans Thai",system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+.fal[hidden]{display:none}
+.fal-card{width:100%;max-width:380px;background:linear-gradient(180deg,#181d2b,#121624);border:1px solid #262b39;border-radius:40px;padding:34px 26px 28px;text-align:center;box-shadow:0 30px 80px #000a,inset 0 1px 0 #ffffff0d;margin:auto}
+.fal-logo{width:112px;height:112px;margin:0 auto 6px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#c9a86a40 0%,#c9a86a14 45%,transparent 70%)}
+.fal-logo img{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 4px 14px #d8b67855)}
+.fal-word{font-weight:700;letter-spacing:.2em;font-size:21px;margin:4px 0 6px}
+.fal-word b{color:#e2bd72;font-weight:700}
+.fal-sub{color:#a9adbd;font-weight:300;font-size:15px;margin:0 0 20px}
+.fal-dots{display:flex;justify-content:center;gap:14px;margin:0 0 24px;height:16px}
+.fal-dots i{width:15px;height:15px;border-radius:50%;border:1.6px solid #9c8358;transition:background .12s,transform .12s,border-color .12s}
+.fal-dots i.on{background:#e2bd72;border-color:#e2bd72;transform:scale(1.05)}
+.fal-dots.err i{border-color:#e0707f;background:transparent}
+.fal-dots.ok i{background:#7fd1a0;border-color:#7fd1a0}
+.fal-shake{animation:fal-shake .42s}
+@keyframes fal-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+.fal-pad{display:grid;grid-template-columns:repeat(3,76px);gap:14px 22px;justify-content:center}
+.fal-key{width:76px;height:76px;border-radius:50%;border:1px solid #2c3242;background:radial-gradient(circle at 50% 35%,#232938,#1a1f2c);color:#fff;font:400 30px/1 "Kanit",system-ui,sans-serif;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;transition:transform .08s,background .12s;touch-action:manipulation;padding:0}
+.fal-key:active,.fal-key.press{transform:scale(.93);background:#2d3446}
+.fal-key:focus-visible{outline:2px solid #e2bd72;outline-offset:3px}
+.fal-key.ghost{background:transparent;border-color:transparent}
+.fal-key.ghost:active{background:#ffffff0d}
+.fal-key svg{width:34px;height:34px}
+.fal-key:disabled{opacity:.35;cursor:default}
+.fal-msg{min-height:22px;margin:22px 0 0;color:#e0707f;font-size:14.5px;line-height:1.5}
+.fal-msg.ok{color:#9fb0c9}
+.fal-busy{display:none;margin:18px auto 0;width:26px;height:26px;border:3px solid #e2bd7233;border-top-color:#e2bd72;border-radius:50%;animation:fal-spin .8s linear infinite}
+.fal.busy .fal-busy{display:block}
+.fal.busy .fal-pad{opacity:.5;pointer-events:none}
+@keyframes fal-spin{to{transform:rotate(360deg)}}
+.fal-offer{display:none;margin-top:6px}
+.fal.offer .fal-pad,.fal.offer .fal-dots{display:none}
+.fal.offer .fal-offer{display:block}
+.fal-offer p{color:#c8ccd8;font-weight:300;margin:0 0 18px;font-size:15px}
+.fal-btn{display:block;width:100%;border:0;border-radius:16px;padding:14px;font:500 16px "Kanit",system-ui,sans-serif;cursor:pointer;margin-top:10px}
+.fal-btn.gold{background:linear-gradient(90deg,#a8834f,#e9d39a);color:#17140e}
+.fal-btn.plain{background:#232938;color:#c8ccd8}
+@media (max-height:700px){.fal-card{padding:22px 20px 18px}.fal-logo{width:84px;height:84px}.fal-logo img{width:56px;height:56px}.fal-key{width:66px;height:66px;font-size:26px}.fal-pad{grid-template-columns:repeat(3,66px);gap:10px 20px}.fal-sub{margin-bottom:14px}.fal-dots{margin-bottom:16px}}
+@media (max-width:360px){.fal-key{width:64px;height:64px;font-size:26px}.fal-pad{grid-template-columns:repeat(3,64px);gap:10px 16px}.fal-dots{gap:10px}}

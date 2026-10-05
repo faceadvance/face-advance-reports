@@ -1,0 +1,9 @@
+# ข้อมูลดิบห้ามขึ้น repo — เก็บที่ ../reports-src/ เท่านั้น
+*.json
+!data/meta.json
+*.tmp
+.env
+.env.*
+secrets.env
+.DS_Store
+node_modules/

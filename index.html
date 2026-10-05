@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#07080c">
+<title>Face Advance · รายงาน</title>
+<link rel="icon" href="assets/fmark.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/lock.css">
+<style>
+  html,body{margin:0;background:#07080c;color:#fff;font-family:"Kanit",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .hub{min-height:100vh;background:radial-gradient(120% 60% at 50% -10%,#2b2721 0%,#13120f 40%,#07080c 100%);padding:max(28px,env(safe-area-inset-top)) 18px 48px}
+  .hub[hidden]{display:none}
+  .hub-in{max-width:760px;margin:0 auto}
+  .hub-top{display:flex;align-items:center;gap:12px}
+  .hub-top img{width:40px;height:40px;object-fit:contain}
+  .hub-word{font-weight:700;letter-spacing:.18em;font-size:16px}
+  .hub-word b{color:#e2bd72}
+  .hub-lock{margin-left:auto;background:#181d2b;border:1px solid #262b39;color:#c8ccd8;border-radius:12px;padding:8px 14px;font:400 14px "Kanit",sans-serif;cursor:pointer}
+  .hub h1{font-weight:500;font-size:26px;margin:28px 0 4px}
+  .hub .lead{color:#a9adbd;font-weight:300;margin:0 0 20px}
+  .list{display:grid;gap:12px}
+  .item{display:block;text-decoration:none;color:inherit;background:linear-gradient(180deg,#181d2b,#121624);border:1px solid #262b39;border-radius:22px;padding:18px 20px;transition:border-color .15s,transform .15s}
+  .item:hover{border-color:#e2bd7266;transform:translateY(-1px)}
+  .item .tag{display:inline-block;font-size:12px;color:#e2bd72;border:1px solid #e2bd7244;border-radius:99px;padding:1px 10px;margin-bottom:8px}
+  .item h2{font-weight:500;font-size:19px;margin:0 0 4px;line-height:1.35}
+  .item p{margin:0;color:#a9adbd;font-weight:300;font-size:14.5px}
+  .item .meta{margin-top:10px;font-size:12.5px;color:#7f8496}
+  .err{color:#e0707f;text-align:center;margin-top:40vh;font-weight:300}
+</style>
+</head>
+<body>
+<noscript><p class="err">ต้องเปิด JavaScript เพื่อเข้าดูรายงาน</p></noscript>
+<main class="hub" id="hub" hidden>
+  <div class="hub-in">
+    <div class="hub-top"><img src="assets/fmark.png" alt=""><div class="hub-word">FACE <b>ADVANCE</b></div><button class="hub-lock" id="lockBtn">ล็อก</button></div>
+    <h1>รายงาน</h1>
+    <p class="lead">เลือกรายงานที่ต้องการดู</p>
+    <div class="list" id="list"></div>
+  </div>
+</main>
+<script src="assets/fa-lock.js"></script>
+<script>
+(async () => {
+  const slug = new URLSearchParams(location.search).get('r');
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  try {
+    const m = await FALock.manifest();
+    if (slug) {
+      const r = m.reports.find((x) => x.slug === slug);
+      if (!r || !/^[a-z0-9]+$/.test(r.file)) { location.replace('./'); return; }
+      const p = await FALock.load(r.file);   // หน้ารายงานทั้งหน้าอยู่ในไฟล์เข้ารหัส (ชื่อไฟล์สุ่ม ไม่บอกหัวข้อ)
+      document.open(); document.write(p.html); document.close();
+      return;
+    }
+    document.getElementById('list').innerHTML = m.reports.map((r) => `<a class="item" href="?r=${encodeURIComponent(r.slug)}">
+      ${r.tag ? `<span class="tag">${esc(r.tag)}</span>` : ''}<h2>${esc(r.title)}</h2><p>${esc(r.desc)}</p><div class="meta">${esc(r.meta)}</div></a>`).join('');
+    document.getElementById('lockBtn').onclick = () => FALock.lock();
+    document.getElementById('hub').hidden = false;
+  } catch (e) {
+    document.body.innerHTML = `<p class="err">เปิดรายงานไม่ได้ · ${esc(e.message)}</p>`;
+  }
+})();
+</script>
+</body>
+</html>
